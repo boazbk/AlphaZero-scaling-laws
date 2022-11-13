@@ -86,7 +86,7 @@ def load_config(dir_name, version='training'):
         'training': from OpenSpiel;
         'matches': from this code.
     """
-    path = dir_name + '/config.json'
+    path =  os.path.join(dir_name, 'config.json')
     with open(path) as f:
         data = json.load(f)
     if version == 'training':
@@ -100,7 +100,7 @@ def load_config(dir_name, version='training'):
 
 def get_model_params(path):
     # load from json file
-    with open (path + 'config.json') as f:
+    with open (os.path.join(path,'config.json'))  as f:
         conf = json.load(f)
     params = {
         'nn_model': conf['nn_model'],
@@ -133,7 +133,7 @@ def load_model_from_checkpoint(config, checkpoint_number=None, path=None):
     if checkpoint_number is None:
         # Get the latest checkpoint in the log and load it to a model.
         variables = {}
-        with open(path + 'checkpoint') as f:
+        with open(os.path.join(path, 'checkpoint')) as f:
             for line in f:
                 name, value = line.split(": ")
                 variables[name] = value
@@ -368,7 +368,7 @@ def run_matches(config: Config):
     # This is sensitive to changes in the log and will crash when an error pops up in one of the threads.
     score = 0
     for n in range(config.evaluators):
-        with open(config.path + '/log-' + config.logfile + '-' + str(n) + '.txt') as f:
+        with open(os.path.join(config.path, '/log-' + config.logfile + '-' + str(n) + '.txt')) as f:
             lines = f.readlines()
         score += float(lines[-2][-7:-1])  # If crashed here it means an evaluator process crashed.
     score = score / config.evaluators
