@@ -99,13 +99,16 @@ def load_config(dir_name, version='training'):
 
 
 def get_model_params(path):
-    conf = load_config(path, version='training')
+    # load from json file
+    with open (path + 'config.json') as f:
+        conf = json.load(f)
     params = {
-        'nn_model': conf.nn_model,
-        'nn_width': conf.nn_width,
-        'nn_depth': conf.nn_depth
+        'nn_model': conf['nn_model'],
+        'nn_width': conf['nn_width'],
+        'nn_depth': conf['nn_depth']
     }
     return params
+
 
 
 def load_model_from_checkpoint(config, checkpoint_number=None, path=None):
